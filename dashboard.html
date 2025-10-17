@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="post-login.css">
+</head>
+<body>
+<div id="preloader">
+<span class="loader"></span>
+</div> 
+<div id="main-content" style="display:none;">
+    <div class="nav">
+        <img src="images/logo.png">
+        <div class="nav-right">
+            <div class="nav-content">
+                <h5> Welcome, <span id="username"></span>!</h5>
+                <button id="signout-btn">Sign Out</button>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a class="active" href="dashboard.html">Dashboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="history.html">History</a>
+        <a href="Info.html">Information Forum</a>
+    </div>
+
+    <div class="content1">
+        <div class="check-stress-section" id="check-stress-section">
+            <img src="images/checkstress-db.jpg"><br>
+            <button class="check-stress-btn" id="check-stress-btn"> Check Stress Level</button>
+        </div>
+        <div class="student-form" id="student" style="display: none;">
+            <h2>Academic Stress Check-In</h2>
+            <form id="student-form">
+               <label for="anxiety_level">Anxiety Level (1-25)</label>
+               <input type="number" min="0" max="25" required placeholder="0-25" id="anxiety_level">
+               <label for="depression">Depression Level (1-25)</label>
+               <input type="number" min="0" max="25" required placeholder="0-25" id="depression">
+               <label for="sleep_quality">Sleep Quality (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="sleep_quality">
+               <label for="academic_performance">Academic Performance (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="academic_performance">
+               <label for="study_load">Study Load (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="study_load">
+               <label for="teacher_student_relationship">Teacher-Student Relationship (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="teacher_student_relationship">
+               <label for="future_career_concerns">Career Concerns (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="future_career_concerns">
+               <label for="social_support">Social Support (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="social_support">
+               <label for="peer_pressure">Peer Pressure (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="peer_pressure">
+               <label for="extracurricular_load">Extracurricular Load (1-5)</label>
+               <input type="number" min="0" max="5" required placeholder="0-5" id="extracurricular_load">
+               <button type="submit" class="inputs-submitbtn" id="student-submit-btn">Done</button>
+            </form>
+        </div>
+
+        <div class="employee" id="employee" style="display: none;">
+            <h2>Workplace Stress Check-In</h2>
+            <form id="employee-form">
+                <label for="job_role">Job Role</label>
+                <input type="text" required placeholder="Job Role" id="job_role">
+                <label for="working_hours">Working Hours</label>
+                <input type="number" required placeholder="Number of working hours" id="working_hours">
+                <label for="virtual_meetings">Virtual Meetings</label>
+                <input type="number" required placeholder="Number of virtual meetings" id="virtual_meetings">
+                <label for="work_life_balance">Work-Life Balance Rating (1-5)</label>
+                <input type="number" min="0" max="5" required placeholder="0-5" id="work_life_balance">
+                <label for="access_to_mental_health">Access to mental health resources</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="access_to_mental_health" value="yes" required>Yes</label>
+                    <label><input type="radio" name="access_to_mental_health" value="no" required>No</label>
+                </div>
+                <label for="satisfaction_with_remote_work">Remote Work Satisfaction</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="satisfaction_with_remote_work" value="satisfied" required>Satisfied</label>
+                    <label><input type="radio" name="satisfaction_with_remote_work" value="unsatisfied" required>Unsatisfied</label>
+                </div>
+                <label for="company_support">Company Support for remote work (1-5)</label>
+                <input type="number" min="0" max="5" required placeholder="0-5" id="company_support">
+                <label for="physical_activity">Physical Activity</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="physical_activity" value="none" required>None</label>
+                    <label><input type="radio" name="physical_activity" value="daily" required>Daily</label>
+                    <label><input type="radio" name="physical_activity" value="weekly" required>Weekly</label>
+                </div>
+                <label for="sleep_quality">Sleep Quality</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="sleep_quality" value="poor" required>Poor</label>
+                    <label><input type="radio" name="sleep_quality" value="average" required>Average</label>
+                    <label><input type="radio" name="sleep_quality" value="good" required>Good</label>
+                </div>
+                <button type="submit" class="inputs-submitbtn" id="employee-submit-btn">Done</button>
+            </form>
+        </div>
+        <div class="display-stress" id="display-stress" style="display: none;">
+            <h1> Your stress score is</h1>
+            <h4>Tips</h4>
+            <button class="go-back" id="go-back-btn">Go Back</button>
+        </div>
+    </div>
+</div>
+<script>
+window.addEventListener('load', function(){
+    const minTime = 2000;
+    const preloader = document.getElementById('preloader');
+    const mainContent = document.getElementById('main-content');
+
+    setTimeout(() =>{
+        preloader.style.opacity='0';
+        setTimeout(() =>{
+            preloader.style.display='none';
+            mainContent.style.display='block';
+        },1000);
+    },minTime);
+});
+
+/* DASHBOARD LOGIC */
+document.addEventListener('DOMContentLoaded', function() {
+    // Replace with your actual backend IP address
+    const BASE_URL = 'http://127.0.0.1:5000';
+
+    // DOM refs
+    const checkStressBtn = document.getElementById('check-stress-btn');
+    const checkStressSection = document.getElementById('check-stress-section');
+    const studentFormWrapper = document.getElementById('student');
+    const employeeFormWrapper = document.getElementById('employee');
+    const studentForm = document.getElementById('student-form');
+    const employeeForm = document.getElementById('employee-form');
+    const displayStress = document.getElementById('display-stress');
+    const goBackBtn = document.getElementById('go-back-btn');
+    const usernameDisplay = document.getElementById("username");
+    const signoutBtn = document.getElementById("signout-btn");
+    
+    // --- Initial setup ---
+    const username = localStorage.getItem('username');
+    const userId = localStorage.getItem('user_id');
+    const userRole = localStorage.getItem('mode');
+
+    if (username) usernameDisplay.textContent = username;
+    if (!username || !userId || !userRole) {
+        alert('Please sign in and complete your profile first.');
+        window.location.href = 'signin.html';
+        return;
+    }
+
+    // --- Show the correct form based on user's role ---
+    checkStressBtn.addEventListener('click', () => {
+        checkStressSection.style.display = "none";
+        if (userRole === 'student') {
+            studentFormWrapper.style.display = "block";
+            employeeFormWrapper.style.display = "none";
+        } else {
+            employeeFormWrapper.style.display = "block";
+            studentFormWrapper.style.display = "none";
+        }
+    });
+
+    // --- Helper function for radio buttons ---
+    const getRadioValue = (name) => {
+        const radio = document.querySelector(`input[name="${name}"]:checked`);
+        return radio ? radio.value : null;
+    };
+
+    // --- STUDENT form submission ---
+studentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // CORRECTED PAYLOAD STRUCTURE (NO 'features' KEY)
+    const payload = {
+        user_id: Number(userId),
+        role: userRole,
+        anxiety_level: Number(document.getElementById('anxiety_level').value) || 0,
+        depression: Number(document.getElementById('depression').value) || 0,
+        sleep_quality: Number(document.getElementById('sleep_quality').value) || 0,
+        academic_performance: Number(document.getElementById('academic_performance').value) || 0,
+        study_load: Number(document.getElementById('study_load').value) || 0,
+        teacher_student_relationship: Number(document.getElementById('teacher_student_relationship').value) || 0,
+        future_career_concerns: Number(document.getElementById('future_career_concerns').value) || 0,
+        social_support: Number(document.getElementById('social_support').value) || 0,
+        peer_pressure: Number(document.getElementById('peer_pressure').value) || 0,
+        extracurricular_load: Number(document.getElementById('extracurricular_load').value) || 0
+    };
+
+    try {
+        const res = await fetch(`${BASE_URL}/predict`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Prediction request failed');
+        showStressResult(data.stress_score, data.suggestions);
+    } catch (err) {
+        console.error('Student predict error:', err);
+        alert('Error sending data to server: ' + err.message);
+    }
+});
+
+// --- EMPLOYEE form submission ---
+employeeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // CORRECTED PAYLOAD STRUCTURE (NO 'features' KEY)
+    const payload = {
+        user_id: Number(userId),
+        role: userRole,
+        job_role: document.getElementById('job_role').value,
+        working_hours: Number(document.getElementById('working_hours').value) || 0,
+        virtual_meetings: Number(document.getElementById('virtual_meetings').value) || 0,
+        work_life_balance: Number(document.getElementById('work_life_balance').value) || 0,
+        access_to_mental_health: getRadioValue('access_to_mental_health'),
+        satisfaction_with_remote_work: getRadioValue('satisfaction_with_remote_work'),
+        company_support: Number(document.getElementById('company_support').value) || 0,
+        physical_activity: getRadioValue('physical_activity'),
+        sleep_quality: getRadioValue('sleep_quality')
+    };
+
+    try {
+        const res = await fetch(`${BASE_URL}/predict`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Prediction request failed');
+        showStressResult(data.stress_score, data.suggestions);
+    } catch (err) {
+        console.error('Employee predict error:', err);
+        alert('Error sending data to server: ' + err.message);
+    }
+});
+
+    // --- Show results after successful prediction ---
+    function showStressResult(score, suggestions) {
+        studentFormWrapper.style.display = "none";
+        employeeFormWrapper.style.display = "none";
+        checkStressSection.style.display = "none";
+        displayStress.style.display = "block";
+
+        const heading = displayStress.querySelector('h1');
+        const tipsEl = displayStress.querySelector('h4');
+
+        heading.innerHTML = `Your stress score is <strong>${score.toFixed(2)}</strong>`;
+        
+        if (Array.isArray(suggestions)) {
+            tipsEl.innerHTML = '<strong>Tips:</strong><br>' + suggestions.join('<br>');
+        } else {
+            tipsEl.innerHTML = '<strong>Tips:</strong><br>' + suggestions;
+        }
+    }
+
+    // --- Navigation ---
+    goBackBtn.addEventListener('click', () => {
+        displayStress.style.display = "none";
+        checkStressSection.style.display = "block";
+    });
+
+    // --- Sign out ---
+    document.getElementById('signout-btn').addEventListener('click', () => {
+        localStorage.removeItem('username');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('role');
+        window.location.href = 'signin.html';
+    });
+});
+</script>
+</body>
+</html>
